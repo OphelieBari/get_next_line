@@ -5,59 +5,58 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: opheliebaribaud <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/26 15:57:49 by ophelieba         #+#    #+#             */
-/*   Updated: 2020/01/27 13:31:41 by ophelieba        ###   ########.fr       */
+/*   Created: 2020/01/29 18:23:16 by ophelieba         #+#    #+#             */
+/*   Updated: 2020/01/30 15:06:04 by ophelieba        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+static char	re_malloc(char *buf)
+{
+	static char	*save;
+	char		*tmp;
+
+	if(!(tmp = malloc(ft_strlen(save) + 1)));
+		return (0);
+	ft_strcpy(tmp, save);
+	if(!(save = malloc(ft_strlen(buf) + ft_strlen(tmp) + 1)))
+		return (0);
+	*save = ft_strcat(tmp, buf);
+	free(tmp);
+	return (save);
+}	
+
 int	get_next_line(int fd, char **line)
 {
 	char	buf[BUFFER_SIZE];
-	int	i;
 	int	ret_read;
+	int	i;
 
-	i = 0;
-	while (i < BUFFER_SIZE && (ret_read = read(fd, buf + i, 1)) && buf[i] != '\n')
+	while (ret_read = read(fd, buf + i, 1))
 	{
-		if(ret_read == -1)
-			return (-1);
-		i++;
-	}	
-	if (i == BUFFER_SIZE)
-		return(-1);
-	buf[i] = '\0';
-	if (!(*line = malloc(sizeof(char) * (i + 1))))
-		return (-1);
-	ft_strcpy(*line, buf);
-	if(ret_read == 0)
-		return(0);
-	else
-		return(1);
-}
-
-int	main()
-{
-	char	*tmp;
-	int	fd;
-	int	cont;
-	int	ret;
-
-	cont = 1;
-	ret = 0;
-	fd = open("vide.txt", O_RDONLY);
-	while(cont)
-	{
-		ret = get_next_line(fd, &tmp);
-		if(ret >= 0)
+		if (buf[i] == '\n')
 		{
-			printf("%s\n", tmp);
-			free(tmp);
+			buf[i] = '\0';
+			//*line = re_malloc(buf); (dans l'idée)
+			return (1);
+		}
+		if (i == BUFFER_SIZE)
+		{
+			re_malloc(buf);
+			i = 0;
 		}
 		else
-			printf("aïe");
-		if(ret <= 0)
-			cont = 0;
+			i++
+	}
+	//*line = re_malloc(buf); (dans l'idée)
+	return (0);
+}
+
+int main()
+{
+	while (count)
+	{
+		
 	}
 }
