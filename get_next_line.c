@@ -6,27 +6,30 @@
 /*   By: opheliebaribaud <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 18:23:16 by ophelieba         #+#    #+#             */
-/*   Updated: 2020/01/30 20:03:31 by obaribau         ###   ########.fr       */
+/*   Updated: 2020/01/31 01:35:46 by ophelieba        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-static char	*re_malloc(char *buf)
+int	re_malloc(char **line, char *buf, int signal)
 {
 	static char	*save;
 	char		*tmp;
 
-	save = NULL;
-	if(!(tmp = malloc(ft_strlen(save) + 1)))
+	if(!(tmp = malloc(sizeof(char) * (ft_strlen(save) + 1))))
 		return (0);
 	ft_strcpy(tmp, save);
-	free(save);
-	if(!(save = malloc(ft_strlen(buf) + ft_strlen(tmp) + 1)))
+	if(!(save = malloc(sizeof(char) * (ft_strlen(buf) + ft_strlen(tmp) + 1))))
+		return (0);
+	if(!(*line = malloc(sizeof(char) * (ft_strlen(buf) + ft_strlen(tmp) + 1))))
 		return (0);
 	save = ft_strcat(tmp, buf);
-	free(tmp);
-	return (save);
+	ft_strcpy(*line, save);
+	if (signal == 1)
+		ft_bzero(save, ft_strlen(tmp));
+	return (0);
 }	
 
 int	get_next_line(int fd, char **line)
@@ -34,7 +37,7 @@ int	get_next_line(int fd, char **line)
 	char	buf[BUFFER_SIZE];
 	int	ret_read;
 	int	i;
-	int count;
+	int 	count;
 
 	i = 0;
 	count = 1;
@@ -46,18 +49,18 @@ int	get_next_line(int fd, char **line)
 		if (buf[i] == '\n')
 		{
 			buf[i] = '\0';
-			re_malloc(buf);
+			re_malloc(line, &buf[0], 1);
 			return (1);
 		}
-		if (i == BUFFER_SIZE - 1)
+		if (i == BUFFER_SIZE - 2)
 		{
-			re_malloc(buf);
+			buf[i + 1] = '\0';
+			re_malloc(line, buf, 0);
 			i = 0;
 		}
 		else
 			i++;
 	}
-	*line = re_malloc(buf);
 	return (0);
 }
 
@@ -75,13 +78,9 @@ int	main()
 	{
 		ret = get_next_line(fd, &tmp);
 		if(ret >= 0)
-		{
 			printf("%s\n", tmp);
-			free(tmp);
-		}
-		else
-			printf("aïe");
 		if(ret <= 0)
 			cont = 0;
 	}
+	return (0);
 }

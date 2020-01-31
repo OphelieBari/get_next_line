@@ -6,7 +6,7 @@
 /*   By: opheliebaribaud <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 20:28:54 by ophelieba         #+#    #+#             */
-/*   Updated: 2020/01/30 18:43:58 by obaribau         ###   ########.fr       */
+/*   Updated: 2020/01/30 22:19:18 by ophelieba        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ char	*ft_strcpy(char *s1, const char *s2);
 int		get_next_line(int fd, char **line);
 char	*ft_strcat(char *s1, const char *s2);
 int	ft_strlen(const char *s);
+void	ft_bzero(void *s, size_t n);
 
 #endif
