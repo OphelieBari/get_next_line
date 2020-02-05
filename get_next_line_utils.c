@@ -6,27 +6,11 @@
 /*   By: opheliebaribaud <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 20:34:17 by ophelieba         #+#    #+#             */
-/*   Updated: 2020/01/31 18:42:27 by obaribau         ###   ########.fr       */
+/*   Updated: 2020/02/04 18:44:09 by ophelieba        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-char	*ft_strcpy(char *s1, const char *s2)
-{
-	size_t i;
-
-	i = 0;
-	if (!s1 || !s2)
-		return (0);
-	while (s2[i])
-	{
-		s1[i] = s2[i];
-		i++;
-	}
-	s1[i] = '\0';
-	return (s1);
-}
 
 int		ft_strlen(const char *s)
 {

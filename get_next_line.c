@@ -6,12 +6,11 @@
 /*   By: opheliebaribaud <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 18:23:16 by ophelieba         #+#    #+#             */
-/*   Updated: 2020/01/31 18:40:07 by obaribau         ###   ########.fr       */
+/*   Updated: 2020/02/04 18:38:44 by ophelieba        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 int	re_malloc(char **line, char *buf, int signal)
 {
@@ -42,11 +41,9 @@ int	get_next_line(int fd, char **line)
 	char	buf[BUFFER_SIZE + 1];
 	int		ret_read;
 	int		i;
-	int		count;
 
 	i = 0;
-	count = 1;
-	while (count == 1)
+	while (i >= 0)
 	{
 		ret_read = read(fd, buf + i, 1);
 		if (ret_read < 0)
@@ -55,7 +52,6 @@ int	get_next_line(int fd, char **line)
 		{
 			buf[i] = '\0';
 			re_malloc(line, &buf[0], 2);
-			count = 0;
 			return (0);
 		}
 		if (buf[i] == '\n')
