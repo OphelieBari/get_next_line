@@ -6,33 +6,45 @@
 /*   By: opheliebaribaud <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 18:23:16 by ophelieba         #+#    #+#             */
-/*   Updated: 2020/02/04 18:38:44 by ophelieba        ###   ########.fr       */
+/*   Updated: 2020/02/05 19:58:32 by obaribau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 int	re_malloc(char **line, char *buf, int signal)
 {
 	static char	*save;
-	char		*tmp;
+	static int 	i;
 
-	tmp = ft_strdup(save);
-	free(save);
-	save = NULL;
-	save = ft_strjoin(tmp, buf);
-	if (signal == 1)
+	i = 0;
+	if (signal == 0)
 	{
-		*line = ft_strdup(save);
-		ft_bzero(save, ft_strlen(save));
-	}
-	if (signal == 2)
-	{
-		*line = ft_strdup(save);
-		free(save);
 		save = NULL;
+		free(save);
+		buf = NULL;
+		free(buf);
+		return (0);
 	}
-	free(tmp);
+	while (buf[i] && buf[i] != '\n')
+		i++;
+	if (buf[i] == '\n')
+	{
+		buf[i] = 0;
+		*line = ft_strjoin(save, buf);
+		save = ft_strdup_mod(&buf[i + 1], ft_strlen(&buf[i + 1]));
+		return (0);
+	}
+	if (buf[i] == 0)
+	{
+		save = ft_strjoin(save, buf);
+		return (1);
+	}
+	save = NULL;
+	free(save);
+	buf = NULL;
+	free(buf);
 	return (0);
 }
 
@@ -42,32 +54,53 @@ int	get_next_line(int fd, char **line)
 	int		ret_read;
 	int		i;
 
-	i = 0;
-	while (i >= 0)
+	i = 1;
+	ret_read = 1;
+	if (BUFFER_SIZE == 0)
+		return (-1);
+	while (i && ret_read != 0)
 	{
-		ret_read = read(fd, buf + i, 1);
+		ret_read = read(fd, buf, BUFFER_SIZE);
 		if (ret_read < 0)
 			return (-1);
-		if (ret_read == 0)
+		buf[BUFFER_SIZE] = '\0';
+		if (!(re_malloc(line, &buf[0], 1)))
 		{
-			buf[i] = '\0';
-			re_malloc(line, &buf[0], 2);
-			return (0);
-		}
-		if (buf[i] == '\n')
-		{
-			buf[i] = '\0';
-			re_malloc(line, &buf[0], 1);
+			re_malloc(line, &buf[0], 0);
 			return (1);
 		}
-		if (i == BUFFER_SIZE - 1)
-		{
-			buf[i + 1] = '\0';
-			re_malloc(line, buf, 0);
-			i = 0;
-		}
-		else
-			i++;
 	}
+	*line = malloc(1);
+		*line[0] = '\0';
+	return (0);
+}
+
+int main()
+{
+	int             fd;
+	int             i;
+	int             j;
+	char    		*line = 0;
+	char			*lineadress[66];
+
+	j = 1;
+	printf("\n==========================================\n");
+	printf("========== TEST 1 : The Alphabet =========\n");
+	printf("==========================================\n\n");
+
+	if (!(fd = open("alphabet", O_RDONLY)))
+	{
+		printf("\nError in open\n");
+		return (0);
+	}
+	while ((i = get_next_line(fd, &line)) > 0)
+	{
+		printf("|%s\n", line);
+		lineadress[j - 1] = line;
+		j++;
+	}
+	printf("|%s\n", line);
+	free(line);
+	close(fd);
 	return (0);
 }
