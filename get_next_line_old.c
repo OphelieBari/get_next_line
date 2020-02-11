@@ -5,68 +5,67 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: opheliebaribaud <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/06 21:03:02 by ophelieba         #+#    #+#             */
-/*   Updated: 2020/02/09 15:10:27 by ophelieba        ###   ########.fr       */
+/*   Created: 2020/01/29 18:23:16 by ophelieba         #+#    #+#             */
+/*   Updated: 2020/02/06 17:19:14 by ophelieba        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
+
+int	re_malloc(char **line, char *buf)
+{
+	static char	*save;
+	static int 	i;
+
+	i = 0;
+	if (!save)
+		save = ft_strdup_mod(buf, ft_strlen(buf));
+	while (save[i] && save[i] != '\n')
+		i++;
+	if (save[i] == 0)
+	{
+		save = ft_strjoin(save, buf);
+		printf("\nsave is = |%s|\n", save);
+		return (1);
+	}
+	if (save[i] == '\n')
+	{
+		*line = ft_strdup_mod(save, i);
+		save = ft_strdup_mod(&save[i + 1], ft_strlen(&save[i + 1]));
+		return (0);
+	}
+//	save = NULL;
+//	free(save);
+//	buf = NULL;
+//	free(buf);
+	return (0);
+}
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*save;
-	char		buf[BUFFER_SIZE + 1];
+	char	buf[BUFFER_SIZE + 1];
+	int		ret_read;
 	int		i;
-	static int	ret_read;
 
-	i = 0;
-	if (save == NULL)
+	i = 1;
+	ret_read = 1;
+	if (BUFFER_SIZE <= 0 || !line || fd < 0)
+		return (-1);
+	while (ret_read > 0)
 	{
 		ret_read = read(fd, buf, BUFFER_SIZE);
 		if (ret_read < 0)
 			return (-1);
-		save = ft_strdup_mod(buf, ft_strlen(buf));
-	}
-	if(ft_strchr(save, '\n'))
-	{
-		if (save[0] == '\n')
-		{
-			*line = NULL;
-			save = ft_strdup_mod(&save[1], ft_strlen(&save[1]));
-			return (1);
-		}
-		while (save[i] != '\n')
-			i++;
-		*line = ft_strdup_mod(save, i);
-		save = ft_strdup_mod(&save[i + 1], ft_strlen(&save[i + 1]));
+		buf[BUFFER_SIZE] = '\0';
+		while ((re_malloc(line, buf) > 0))
+			re_malloc(line, buf);
 		return (1);
 	}
-	if (ret_read > 0)
-	{
-		while (!(ft_strchr(save, '\n')) && ret_read > 0)
-		{
-			ret_read = read(fd, buf, BUFFER_SIZE);
-			if (ret_read > 0)
-				save = ft_strjoin(save, buf);
-			if (ret_read < 0)
-				return (-1);
-		}
-		while (save[i] != '\n')
-			i++;
-		*line = ft_strdup_mod(save, i);
-		save = ft_strdup_mod(&save[i + 1], ft_strlen(&save[i + 1]));
-		if (ret_read == 0)
-		{
-			save = NULL;
-			free(save);
-			return (0);
-		}
-		return (1);
-	}
+//	re_malloc(line, &buf[0]);
+	*line = NULL;
 	return (0);
 }
-
-#include <stdio.h>
 
 int main()
 {

@@ -6,7 +6,7 @@
 /*   By: opheliebaribaud <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 20:34:17 by ophelieba         #+#    #+#             */
-/*   Updated: 2020/02/05 14:52:49 by obaribau         ###   ########.fr       */
+/*   Updated: 2020/02/07 01:03:40 by ophelieba        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,4 +117,16 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 		while (len-- > 0)
 			((unsigned char *)dst)[len] = ((unsigned char *)src)[len];
 	return (ret);
+}
+
+int	ft_strchr(const char *s, int c)
+{
+	char *str;
+
+	str = (char *)s;
+	while (*str != (char)c && *str != '\0')
+		str++;
+	if (*str == (char)c)
+		return (1);
+	return (0);
 }

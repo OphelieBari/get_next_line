@@ -6,7 +6,7 @@
 /*   By: opheliebaribaud <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 20:28:54 by ophelieba         #+#    #+#             */
-/*   Updated: 2020/02/05 14:47:55 by obaribau         ###   ########.fr       */
+/*   Updated: 2020/02/07 01:03:24 by ophelieba        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup_mod(const char *s1, int j);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
+int	ft_strchr(const char *s, int c);
 
 #endif
