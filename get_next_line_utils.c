@@ -6,7 +6,7 @@
 /*   By: opheliebaribaud <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 20:34:17 by ophelieba         #+#    #+#             */
-/*   Updated: 2020/02/11 14:36:43 by obaribau         ###   ########.fr       */
+/*   Updated: 2020/02/12 17:16:51 by obaribau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,6 @@ int		ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	size_t i;
-
-	i = 0;
-	while (i < n)
-	{
-		if (((char *)s)[i] == '\0')
-			i++;
-		else
-		{
-			((char*)s)[i] = '\0';
-			i++;
-		}
-	}
 }
 
 char	*ft_strdup_mod(const char *s1, int j)
@@ -88,38 +71,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (tab);
 }
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	unsigned char *d;
-	unsigned char *s;
-
-	if (!dst && !src)
-		return (dst);
-	if (!n)
-		return (dst);
-	d = (unsigned char *)dst;
-	s = (unsigned char *)src;
-	while (n--)
-		*d++ = *s++;
-	return (dst);
-}
-
-void	*ft_memmove(void *dst, const void *src, size_t len)
-{
-	void	*ret;
-
-	ret = dst;
-	if (!dst && !src)
-		return (ret);
-	if (dst < src)
-		ft_memcpy(dst, src, len);
-	else
-		while (len-- > 0)
-			((unsigned char *)dst)[len] = ((unsigned char *)src)[len];
-	return (ret);
-}
-
-int	ft_strchr(const char *s, int c)
+int		ft_strchr(const char *s, int c)
 {
 	char *str;
 
